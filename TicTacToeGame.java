@@ -9,18 +9,13 @@ public class TicTacToeGame {
 	static Scanner sc=new Scanner(System.in);
 	public static char[] createBoard() {
 		 char[] Board= new char[10];
-	     for(int index=0;index<10;index++){
+	     for(int index=1;index<10;index++){
 	    	Board[index]=' ';
         	}
 	     return Board;
 	  }
 	
-	public static void showBoard() {
-		 char[] Board= new char[10];
-	     for(int index=0;index<10;index++){
-	    	Board[index]=' ';
-       	}
-	  }
+	
 	
 	public static char choice() {
 		System.out.println("Enter you input(X/O):");
@@ -44,9 +39,12 @@ public class TicTacToeGame {
 	
 	public static void showBoard(char[] assignedBoard)
 	{
-	 for(int index=0;index<10;index++)
-	 {
-		 System.out.println(assignedBoard[index]+ "--");
+	 for(int row=1;row<=3;row++){
+		 for(int column=0;column<=3;column++) {
+			 System.out.print(assignedBoard[row+column]+ "--"); 
+		 }
+		 
+		 System.out.println();
 	 }
 	}
      public static void main(String[] args) {
