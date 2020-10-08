@@ -7,11 +7,13 @@ public class TicTacToeGame {
 	public static final char O_CHARACTER ='O';
 	public static final int IS_COMPUTER_TURN=1;
 	public static final int IS_USER_TURN=0;
-	enum turn{
-		computerTurn,UserTurn;
+	public enum Players{
+		COMPUTERTURN,USERTURN;
 	}
 	
 	static Scanner sc=new Scanner(System.in);
+	
+	
 	public static char[] createBoard() {
 		 char[] Board= new char[10];
 	     for(int index=1;index<10;index++){
@@ -22,6 +24,9 @@ public class TicTacToeGame {
 	
 	
 	
+	/**
+	 * @return
+	 */
 	public static char choice() {
 		System.out.println("Enter you input(X/O):");
 		char option = sc.next().charAt(0); 
@@ -98,13 +103,16 @@ public class TicTacToeGame {
 	     }while(choice=='Y');
 		return Board;
 	}
-	public static String Toss() {
+	/**
+	 * @return
+	 */
+	public static Players firstPlayer() {
 		int a= (int)Math.floor(Math.random()*10)%2; 
 		if(a==IS_COMPUTER_TURN){
-			return "Computer" ;
+			return Players.COMPUTERTURN ;
 			}
 		else {
-			return "User" ;
+			return Players.USERTURN  ;
 		}
 	}
 	
@@ -112,7 +120,7 @@ public class TicTacToeGame {
 	    char[] assignedBoard = new char[10];
 	    char repeat;
 	    assignedBoard=createBoard();
-	    String firstPlay=Toss();
+	    Players firstPlay=firstPlayer();
 	    
 	    System.out.println("first Turn goes to " + firstPlay);
 	    
