@@ -5,6 +5,11 @@ public class TicTacToeGame {
 	public static final char EMPTY =' ';
 	public static final char X_CHARACTER ='X';
 	public static final char O_CHARACTER ='O';
+	public static final int IS_COMPUTER_TURN=1;
+	public static final int IS_USER_TURN=0;
+	enum turn{
+		computerTurn,UserTurn;
+	}
 	
 	static Scanner sc=new Scanner(System.in);
 	public static char[] createBoard() {
@@ -88,21 +93,38 @@ public class TicTacToeGame {
 			System.out.println("enter you input (X/O");
 			char desiredInput = sc.next().charAt(0);
 			Board[desiredIndex]=desiredInput;
-		    System.out.println("do you want to perform again (Y/N:");
+		    System.out.println("do you want to perform again (Y/N:)");
 		choice = sc.next().charAt(0);
 	     }while(choice=='Y');
 		return Board;
 	}
+	public static String Toss() {
+		int a= (int)Math.floor(Math.random()*10)%2; 
+		if(a==IS_COMPUTER_TURN){
+			return "Computer" ;
+			}
+		else {
+			return "User" ;
+		}
+	}
 	
      public static void main(String[] args) {
 	    char[] assignedBoard = new char[10];
+	    char repeat;
 	    assignedBoard=createBoard();
+	    String firstPlay=Toss();
+	    
+	    System.out.println("first Turn goes to " + firstPlay);
+	    
+	    do {
 	    showBoard(assignedBoard);
 	    char optedChoice=choice();
-	   
 	    showBoard(assignedBoard);
 		int indexDesired=desiredLocation(assignedBoard);
 		makeMove(indexDesired,assignedBoard);
 	    System.out.println("chosen option "+ optedChoice);
-		}
+	    System.out.println("do you want to perform again (Y/N:)");
+		repeat = sc.next().charAt(0);
+		}while(repeat=='Y');
+     }
     }
