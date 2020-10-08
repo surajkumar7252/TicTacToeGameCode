@@ -48,8 +48,8 @@ public class TicTacToeGame {
 	 }
 	}
 
-	public static boolean move(int index,char[] assignedBoard)
-	{     boolean fact;
+	public static boolean isEmpty(int index,char[] assignedBoard)
+	{     
 	      char[] Board= new char[10];
            Board=assignedBoard;
            if(Board[index]!=' ')
@@ -62,28 +62,33 @@ public class TicTacToeGame {
            }
 		 
 	}
-	
-	public static char[] userDefinedInput(char[] assignedBoard)
+	public static int desiredLocation(char[] assignedBoard)
+	{     
+	      char[] Board= new char[10];
+           Board=assignedBoard;
+           boolean goAhead;
+           System.out.println("Enter your desired index:(between 1 to 9) " );
+   		   int desiredIndex = sc.nextInt();
+   		   goAhead=isEmpty(desiredIndex,Board);
+          if(goAhead)
+          {
+        	  System.out.println("Your selected index in vacant. You can mark here"); 
+        	  
+          }
+          else
+  		{
+  			System.out.println("index not available");
+  		}return desiredIndex;
+	}
+	public static char[] makeMove(int desiredIndex,char[] assignedBoard)
 	{   char[] Board= new char[10];
 	     Board=assignedBoard;
 	     char choice;
-	     boolean goAhead;
-	     do
-	     {
-		System.out.println("Enter your desired index:(between 1 to 9) " );
-		int desiredIndex = sc.nextInt();
-		goAhead=move(desiredIndex,assignedBoard);
-		if(goAhead){
-			System.out.println("Your selected index in vacant. You can mark here");
+	     do {
 			System.out.println("enter you input (X/O");
 			char desiredInput = sc.next().charAt(0);
 			Board[desiredIndex]=desiredInput;
-		 }
-		else
-		{
-			System.out.println("index not available");
-		}
-		System.out.println("do you want to perform again (Y/N:");
+		    System.out.println("do you want to perform again (Y/N:");
 		choice = sc.next().charAt(0);
 	     }while(choice=='Y');
 		return Board;
@@ -94,9 +99,10 @@ public class TicTacToeGame {
 	    assignedBoard=createBoard();
 	    showBoard(assignedBoard);
 	    char optedChoice=choice();
-	    assignedBoard= userDefinedInput(assignedBoard);
+	   
 	    showBoard(assignedBoard);
-		
+		int indexDesired=desiredLocation(assignedBoard);
+		makeMove(indexDesired,assignedBoard);
 	    System.out.println("chosen option "+ optedChoice);
 		}
     }
