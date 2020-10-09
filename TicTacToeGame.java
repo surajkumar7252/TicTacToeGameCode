@@ -229,6 +229,23 @@ public class TicTacToeGame {
 		
 	}
      
+	/**
+	 * UC10
+	 * @param assignedBoard
+	 * @return
+	 */
+	public static int cornerPlayForComputer(char[] assignedBoard) {
+		int freePositionAtCorner = 0;
+		if(assignedBoard[1] == EMPTY)
+			freePositionAtCorner = 1;
+		else if(assignedBoard[3] == EMPTY)
+			freePositionAtCorner = 3;
+		else if(assignedBoard[7] == EMPTY)
+			freePositionAtCorner = 7;
+		else if(assignedBoard[9] == EMPTY)
+			freePositionAtCorner = 9;
+		return freePositionAtCorner;
+	}
     public static void main(String[] args) {
 	    char[] assignedBoard = new char[10];
 	    char repeat;
@@ -253,6 +270,8 @@ public class TicTacToeGame {
 		else {
 		computerBlocksPosition(optedChoice,assignedBoard);
 		}
+		int cornerIndex=cornerPlayForComputer(assignedBoard);
+		System.out.println("CornerIndex to play :" +cornerIndex);
 		System.out.println("Game Status " + forwardPlay);
 	    System.out.println("chosen option "+ optedChoice);
 	    System.out.println("do you want to perform again (Y/N:)");
