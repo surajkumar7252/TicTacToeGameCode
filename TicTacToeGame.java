@@ -10,10 +10,16 @@ public class TicTacToeGame {
 	public enum Players{
 		COMPUTERTURN,USERTURN;
 	}
-	
+	public enum IsPlayingForward{
+		 MATCHDRAW, PLAYERWINS, OTHERSTURN;
+	}
 	static Scanner sc=new Scanner(System.in);
 	
 	
+	/**
+	 * UC1
+	 * @return
+	 */
 	public static char[] createBoard() {
 		 char[] Board= new char[10];
 	     for(int index=1;index<10;index++){
@@ -25,6 +31,7 @@ public class TicTacToeGame {
 	
 	
 	/**
+	 * UC2
 	 * @return
 	 */
 	public static char choice() {
@@ -47,6 +54,10 @@ public class TicTacToeGame {
 		return option;
 	}
 	
+	/**
+	 * UC3
+	 * @param assignedBoard
+	 */
 	public static void showBoard(char[] assignedBoard)
 	{
 	 for(int row=1;row<=3;row++){
@@ -58,6 +69,12 @@ public class TicTacToeGame {
 	 }
 	}
 
+	/**
+	 * UC4
+	 * @param index
+	 * @param assignedBoard
+	 * @return
+	 */
 	public static boolean isEmpty(int index,char[] assignedBoard)
 	{     
 	      char[] Board= new char[10];
@@ -72,6 +89,11 @@ public class TicTacToeGame {
            }
 		 
 	}
+	/**
+	 * UC4
+	 * @param assignedBoard
+	 * @return
+	 */
 	public static int desiredLocation(char[] assignedBoard)
 	{     
 	      char[] Board= new char[10];
@@ -90,12 +112,18 @@ public class TicTacToeGame {
   			System.out.println("index not available");
   		}return desiredIndex;
 	}
+	/**
+	 * UC5
+	 * @param desiredIndex
+	 * @param assignedBoard
+	 * @return
+	 */
 	public static char[] makeMove(int desiredIndex,char[] assignedBoard)
 	{   char[] Board= new char[10];
 	     Board=assignedBoard;
 	     char choice;
 	     do {
-			System.out.println("enter you input (X/O");
+			System.out.println("enter you input (X/O)");
 			char desiredInput = sc.next().charAt(0);
 			Board[desiredIndex]=desiredInput;
 		    System.out.println("do you want to perform again (Y/N:)");
@@ -104,6 +132,7 @@ public class TicTacToeGame {
 		return Board;
 	}
 	/**
+	 * UC6
 	 * @return
 	 */
 	public static Players firstPlayer() {
@@ -115,6 +144,44 @@ public class TicTacToeGame {
 			return Players.USERTURN  ;
 		}
 	}
+	
+	
+	/**
+	 * UC7
+	 * @param optedChoice
+	 * @param assignedBoard
+	 */
+	public static IsPlayingForward isPlayForwardPossible (char optedChoice,char[] assignedBoard)
+	{  
+          if(assignedBoard[1]==optedChoice && assignedBoard[2]==optedChoice && assignedBoard[3]==optedChoice ||
+        	 assignedBoard[4]==optedChoice && assignedBoard[5]==optedChoice && assignedBoard[6]==optedChoice ||
+        	 assignedBoard[7]==optedChoice && assignedBoard[8]==optedChoice && assignedBoard[9]==optedChoice||
+        	 assignedBoard[1]==optedChoice && assignedBoard[4]==optedChoice && assignedBoard[7]==optedChoice||
+        	 assignedBoard[2]==optedChoice && assignedBoard[5]==optedChoice && assignedBoard[8]==optedChoice||
+        	 assignedBoard[3]==optedChoice && assignedBoard[6]==optedChoice && assignedBoard[9]==optedChoice||
+        	 assignedBoard[1]==optedChoice && assignedBoard[5]==optedChoice && assignedBoard[9]==optedChoice||
+        	 assignedBoard[3]==optedChoice && assignedBoard[5]==optedChoice && assignedBoard[7]==optedChoice){
+          
+			return IsPlayingForward.PLAYERWINS;
+		}
+          
+          else{ 
+        	  int counter=0;
+        	  for(int index=1;index<10;index++) {
+        		 if(assignedBoard[index]!=' ') {
+        			 counter++;
+        		  }
+        	    }
+        	 if(counter==9) 
+        		 return IsPlayingForward.MATCHDRAW;
+        	
+        	 else 
+        	     return IsPlayingForward.OTHERSTURN;
+        	 }
+        	 
+          }
+          
+		
 	
      public static void main(String[] args) {
 	    char[] assignedBoard = new char[10];
@@ -128,8 +195,11 @@ public class TicTacToeGame {
 	    showBoard(assignedBoard);
 	    char optedChoice=choice();
 	    showBoard(assignedBoard);
+	    
 		int indexDesired=desiredLocation(assignedBoard);
-		makeMove(indexDesired,assignedBoard);
+		assignedBoard=makeMove(indexDesired,assignedBoard);
+		IsPlayingForward forwardPlay=isPlayForwardPossible(optedChoice,assignedBoard);
+		System.out.println("Game Status " + forwardPlay);
 	    System.out.println("chosen option "+ optedChoice);
 	    System.out.println("do you want to perform again (Y/N:)");
 		repeat = sc.next().charAt(0);
