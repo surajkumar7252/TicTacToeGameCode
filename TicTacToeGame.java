@@ -246,7 +246,13 @@ public class TicTacToeGame {
 			freePositionAtCorner = 9;
 		return freePositionAtCorner;
 	}
+    /**
+     * UC13
+     * @param args
+     */
     public static void main(String[] args) {
+    	char newGame=' ';
+    	do{
 	    char[] assignedBoard = new char[10];
 	    char repeat;
 	    int desiredComputerWinIndex;
@@ -277,5 +283,8 @@ public class TicTacToeGame {
 	    System.out.println("do you want to perform again (Y/N:)");
 		repeat = sc.next().charAt(0);
 		}while(repeat=='Y');
+	    System.out.println("Do you wanna play a new game (Y/N)");
+	    newGame = sc.next().charAt(0);
+    	}while(newGame=='Y' || newGame=='y');
      }
     }
