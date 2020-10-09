@@ -78,7 +78,7 @@ public class TicTacToeGame {
 	public static boolean isEmpty(int index,char[] assignedBoard)
 	{     
 	      char[] Board= new char[10];
-           Board=assignedBoard;
+           Board=assignedBoard.clone();
            if(Board[index]!=' ')
            {
         	  return false; 
@@ -97,7 +97,7 @@ public class TicTacToeGame {
 	public static int desiredLocation(char[] assignedBoard)
 	{     
 	      char[] Board= new char[10];
-           Board=assignedBoard;
+           Board=assignedBoard.clone();
            boolean goAhead;
            System.out.println("Enter your desired index:(between 1 to 9) " );
    		   int desiredIndex = sc.nextInt();
@@ -120,7 +120,7 @@ public class TicTacToeGame {
 	 */
 	public static char[] makeMove(int desiredIndex,char[] assignedBoard)
 	{   char[] Board= new char[10];
-	     Board=assignedBoard;
+	     Board=assignedBoard.clone();
 	     char choice;
 	     do {
 			System.out.println("enter you input (X/O)");
@@ -191,7 +191,7 @@ public class TicTacToeGame {
 	{   IsPlayingForward processedChoice;
 		int desiredCell=0;
 	    char[] Board= new char[10];
-        Board=assignedBoard;
+        Board=assignedBoard.clone();
         for(int index=1;index<10;index++)
         {
         	if(Board[index]== EMPTY) {
@@ -205,7 +205,31 @@ public class TicTacToeGame {
         }
 		return desiredCell;
 	}
-     public static void main(String[] args) {
+	
+	/**
+	 * UC9
+	 * @param optedChoice
+	 * @param assignedBoard
+	 * @return
+	 */
+	public static int computerBlocksPosition (char optedChoice,char[] assignedBoard) {
+		
+		char[] board=assignedBoard.clone();
+		for(int position=0;position<board.length-1;position++) {
+			if(isEmpty(position, board)) {
+				board=makeMove(position,board);
+				if(isPlayForwardPossible(optedChoice, board)==IsPlayingForward.PLAYERWINS) {
+					return position;
+				}else {
+					board=board.clone();
+				}
+			}
+		}
+		return -1;
+		
+	}
+     
+    public static void main(String[] args) {
 	    char[] assignedBoard = new char[10];
 	    char repeat;
 	    int desiredComputerWinIndex;
@@ -223,7 +247,12 @@ public class TicTacToeGame {
 		assignedBoard=makeMove(indexDesired,assignedBoard);
 		IsPlayingForward forwardPlay=isPlayForwardPossible(optedChoice,assignedBoard);
 		desiredComputerWinIndex=computerPlaying(optedChoice,assignedBoard);
-		System.out.println("Desired index for the computer to win "+desiredComputerWinIndex);
+		if(desiredComputerWinIndex!=0) {
+			System.out.println("Desired index for the computer to win "+desiredComputerWinIndex);
+		}
+		else {
+		computerBlocksPosition(optedChoice,assignedBoard);
+		}
 		System.out.println("Game Status " + forwardPlay);
 	    System.out.println("chosen option "+ optedChoice);
 	    System.out.println("do you want to perform again (Y/N:)");
