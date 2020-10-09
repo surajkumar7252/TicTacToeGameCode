@@ -181,11 +181,34 @@ public class TicTacToeGame {
         	 
           }
           
-		
-	
+	/**
+	 * UC8
+	 * @param optedChoice
+	 * @param assignedBoard
+	 * @return
+	 */
+	public static int computerPlaying (char optedChoice,char[] assignedBoard)
+	{   IsPlayingForward processedChoice;
+		int desiredCell=0;
+	    char[] Board= new char[10];
+        Board=assignedBoard;
+        for(int index=1;index<10;index++)
+        {
+        	if(Board[index]== EMPTY) {
+        		Board[index]=optedChoice;
+        		processedChoice=isPlayForwardPossible(optedChoice,Board);
+        		if(processedChoice==IsPlayingForward.PLAYERWINS) {
+        			desiredCell=index;
+        		}
+        		
+        	}
+        }
+		return desiredCell;
+	}
      public static void main(String[] args) {
 	    char[] assignedBoard = new char[10];
 	    char repeat;
+	    int desiredComputerWinIndex;
 	    assignedBoard=createBoard();
 	    Players firstPlay=firstPlayer();
 	    
@@ -199,6 +222,8 @@ public class TicTacToeGame {
 		int indexDesired=desiredLocation(assignedBoard);
 		assignedBoard=makeMove(indexDesired,assignedBoard);
 		IsPlayingForward forwardPlay=isPlayForwardPossible(optedChoice,assignedBoard);
+		desiredComputerWinIndex=computerPlaying(optedChoice,assignedBoard);
+		System.out.println("Desired index for the computer to win "+desiredComputerWinIndex);
 		System.out.println("Game Status " + forwardPlay);
 	    System.out.println("chosen option "+ optedChoice);
 	    System.out.println("do you want to perform again (Y/N:)");
