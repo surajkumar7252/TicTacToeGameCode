@@ -7,6 +7,7 @@ public class TicTacToeGame {
 	public static final char O_CHARACTER ='O';
 	public static final int IS_COMPUTER_TURN=1;
 	public static final int IS_USER_TURN=0;
+	private static final int[] sidePositions = new int[] { 1, 3, 5, 7 };
 	public enum Players{
 		COMPUTERTURN,USERTURN;
 	}
@@ -190,19 +191,27 @@ public class TicTacToeGame {
 	public static int computerPlaying (char optedChoice,char[] assignedBoard)
 	{   IsPlayingForward processedChoice;
 		int desiredCell=0;
-	    char[] Board= new char[10];
-        Board=assignedBoard.clone();
+	    char[] board= new char[10];
+        board=assignedBoard.clone();
         for(int index=1;index<10;index++)
         {
-        	if(Board[index]== EMPTY) {
-        		Board[index]=optedChoice;
-        		processedChoice=isPlayForwardPossible(optedChoice,Board);
+        	if(board[index]== EMPTY) {
+        		board[index]=optedChoice;
+        		processedChoice=isPlayForwardPossible(optedChoice,board);
         		if(processedChoice==IsPlayingForward.PLAYERWINS) {
         			desiredCell=index;
         		}
         		
         	}
         }
+        desiredCell=cornerPlayForComputer(assignedBoard);
+        if (desiredCell != -1) {
+			board = makeMove(desiredCell, board);
+		}
+        desiredCell = subsequentChoices(board);
+		if (desiredCell != -1) {
+			board = makeMove(desiredCell, board);
+		}
 		return desiredCell;
 	}
 	
@@ -246,6 +255,24 @@ public class TicTacToeGame {
 			freePositionAtCorner = 9;
 		return freePositionAtCorner;
 	}
+	
+	/**
+	 * UC11
+	 * @param board
+	 * @return
+	 */
+	public static int subsequentChoices(char[] board) {
+		int centralPosition=5;
+		if (isEmpty(centralPosition, board)) {
+			return centralPosition;
+		}
+		for (int position : sidePositions) {
+			if (isEmpty(position, board)) {
+				return position;
+			}
+		}
+		return -1;
+	}
     /**
      * UC13
      * @param args
@@ -276,8 +303,9 @@ public class TicTacToeGame {
 		else {
 		computerBlocksPosition(optedChoice,assignedBoard);
 		}
-		int cornerIndex=cornerPlayForComputer(assignedBoard);
-		System.out.println("CornerIndex to play :" +cornerIndex);
+		
+		
+		
 		System.out.println("Game Status " + forwardPlay);
 	    System.out.println("chosen option "+ optedChoice);
 	    System.out.println("do you want to perform again (Y/N:)");
