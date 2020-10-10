@@ -8,11 +8,17 @@ public class TicTacToeGame {
 	public static final int IS_COMPUTER_TURN=1;
 	public static final int IS_USER_TURN=0;
 	private static final int[] sidePositions = new int[] { 1, 3, 5, 7 };
+	private static final char[] board = new char[10];
+	
+	static char playerLetterChoice, computerLetterChoice;
+	static Players firstPlay;
+	static IsPlayingForward isPlayingForward ;
+	
 	public enum Players{
 		COMPUTERTURN,USERTURN;
 	}
 	public enum IsPlayingForward{
-		 MATCHDRAW, PLAYERWINS, OTHERSTURN;
+		 COMPUTERWINS,MATCHDRAW, PLAYERWINS, OTHERSTURN;
 	}
 	static Scanner sc=new Scanner(System.in);
 	
@@ -22,11 +28,11 @@ public class TicTacToeGame {
 	 * @return
 	 */
 	public static char[] createBoard() {
-		 char[] Board= new char[10];
+		 
 	     for(int index=1;index<10;index++){
-	    	Board[index]=' ';
+	    	board[index]=' ';
         	}
-	     return Board;
+	     return board;
 	  }
 	
 	
@@ -37,22 +43,22 @@ public class TicTacToeGame {
 	 */
 	public static char choice() {
 		System.out.println("Enter you input(X/O):");
-		char option = sc.next().charAt(0); 
-		char computerOption;
-		if(option=='X')
+		playerLetterChoice = sc.next().charAt(0); 
+		
+		if(playerLetterChoice=='X')
 		{
-			computerOption= X_CHARACTER;
+			computerLetterChoice= O_CHARACTER;
 			
 		}
-		if(option=='O')
+		if(playerLetterChoice=='O')
 		{
-			computerOption= O_CHARACTER;
+			computerLetterChoice= X_CHARACTER;
 		}
 		else
 		{
 			System.out.println("Please enter the valid character");
 		}
-		return option;
+		return playerLetterChoice;
 	}
 	
 	/**
@@ -188,7 +194,7 @@ public class TicTacToeGame {
 	 * @param assignedBoard
 	 * @return
 	 */
-	public static int computerPlaying (char optedChoice,char[] assignedBoard)
+	public static char[] computerPlaying (char optedChoice,char[] assignedBoard)
 	{   IsPlayingForward processedChoice;
 		int desiredCell=0;
 	    char[] board= new char[10];
@@ -212,7 +218,7 @@ public class TicTacToeGame {
 		if (desiredCell != -1) {
 			board = makeMove(desiredCell, board);
 		}
-		return desiredCell;
+		return board;
 	}
 	
 	/**
@@ -273,6 +279,65 @@ public class TicTacToeGame {
 		}
 		return -1;
 	}
+	
+	
+	/**
+	 * UC12
+	 * 
+	 */
+	public static void assignedValidLetter() {
+		char playerChoice = choice();
+		
+		if (playerChoice == 'X') {
+			playerLetterChoice = 'X';
+			computerLetterChoice = 'O';
+		} else {
+			playerLetterChoice = 'O';
+			computerLetterChoice = 'X';
+		}
+	}
+
+	
+	/**
+	 * UC12
+	 * @param board
+	 */
+	public static void fullGamePlay(char[] board) {
+		
+		while (true) {
+			IsPlayingForward gameStatus;
+			if (firstPlay == Players.USERTURN) {
+				showBoard(board);
+				int desiredPosition = desiredLocation( board);
+				board = makeMove(desiredPosition, board);
+				gameStatus = isPlayForwardPossible(playerLetterChoice, board);
+			} else {
+				showBoard(board);
+				board = computerPlaying(computerLetterChoice, board);
+				gameStatus = isPlayForwardPossible(computerLetterChoice, board);
+			}
+			if (isPlayingForward == IsPlayingForward.PLAYERWINS) {
+				System.out.println("Player wins.");
+				showBoard(board);
+				break;
+			} else if (isPlayingForward == IsPlayingForward.COMPUTERWINS) {
+				System.out.println("Computer wins.");
+				showBoard(board);
+				break;
+			} else if (isPlayingForward == IsPlayingForward.OTHERSTURN) {
+				if (firstPlay == Players.USERTURN) {
+					firstPlay = Players.COMPUTERTURN;
+				} else {
+					firstPlay = Players.USERTURN;
+				}
+			} else if (isPlayingForward == IsPlayingForward.MATCHDRAW) {
+				System.out.println("Match Tie.");
+				
+				showBoard(board);
+				break;
+			}
+		}
+	}
     /**
      * UC13
      * @param args
@@ -280,37 +345,10 @@ public class TicTacToeGame {
     public static void main(String[] args) {
     	char newGame=' ';
     	do{
-	    char[] assignedBoard = new char[10];
-	    char repeat;
-	    int desiredComputerWinIndex;
-	    assignedBoard=createBoard();
-	    Players firstPlay=firstPlayer();
-	    
-	    System.out.println("first Turn goes to " + firstPlay);
-	    
-	    do {
-	    showBoard(assignedBoard);
-	    char optedChoice=choice();
-	    showBoard(assignedBoard);
-	    
-		int indexDesired=desiredLocation(assignedBoard);
-		assignedBoard=makeMove(indexDesired,assignedBoard);
-		IsPlayingForward forwardPlay=isPlayForwardPossible(optedChoice,assignedBoard);
-		desiredComputerWinIndex=computerPlaying(optedChoice,assignedBoard);
-		if(desiredComputerWinIndex!=0) {
-			System.out.println("Desired index for the computer to win "+desiredComputerWinIndex);
-		}
-		else {
-		computerBlocksPosition(optedChoice,assignedBoard);
-		}
-		
-		
-		
-		System.out.println("Game Status " + forwardPlay);
-	    System.out.println("chosen option "+ optedChoice);
-	    System.out.println("do you want to perform again (Y/N:)");
-		repeat = sc.next().charAt(0);
-		}while(repeat=='Y');
+    		createBoard();
+    		choice();
+    		firstPlay=firstPlayer();
+    		fullGamePlay(board);
 	    System.out.println("Do you wanna play a new game (Y/N)");
 	    newGame = sc.next().charAt(0);
     	}while(newGame=='Y' || newGame=='y');
